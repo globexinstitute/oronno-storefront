@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dress Details | Oronno Fashion</title>
+  <meta name="description" content="View fabric specs, embroidery details, and size guides for authentic Pakistani and ethnic dresses.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    .product-page-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding-block: 2.5rem 4rem;
+    }
+    @media (min-width: 992px) {
+      .product-page-layout {
+        grid-template-columns: 1.15fr 1fr;
+      }
+    }
+    /* Gallery */
+    .gallery-container {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .gallery-container {
+        flex-direction: row;
+      }
+    }
+    .gallery-thumbs {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+    }
+    @media (min-width: 768px) {
+      .gallery-thumbs {
+        flex-direction: column;
+        width: 90px;
+        flex-shrink: 0;
+      }
+    }
+    .gallery-thumb-btn {
+      width: 80px;
+      height: 105px;
+      border: 1px solid var(--color-border);
+      cursor: pointer;
+      opacity: 0.65;
+      transition: opacity var(--transition-fast), border-color var(--transition-fast);
+      overflow: hidden;
+    }
+    .gallery-thumb-btn.active, .gallery-thumb-btn:hover {
+      opacity: 1;
+      border-color: var(--color-burgundy);
+    }
+    .gallery-thumb-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-main {
+      flex: 1;
+      position: relative;
+      background: var(--color-cream);
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+    }
+    .gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: zoom-in;
+      transition: transform 0.3s ease;
+    }
+    .gallery-main.is-zoomed img {
+      transform: scale(1.7);
+      cursor: zoom-out;
+    }
+    /* Purchase details */
+    .product-details-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .product-sku {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+    .product-title {
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .price-main {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--color-burgundy);
+    }
+    .price-strike {
+      font-size: 1.15rem;
+      color: var(--color-text-light);
+      text-decoration: line-through;
+    }
+    .selector-block {
+      margin-bottom: 1.5rem;
+    }
+    .selector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      font-size: 0.88rem;
+    }
+    .size-guide-trigger {
+      color: var(--color-gold);
+      font-size: 0.82rem;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .size-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .size-btn {
+      padding: 0.6rem 1.1rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+    }
+    .size-btn.active {
+      background: var(--color-burgundy);
+      color: var(--color-white);
+      border-color: var(--color-burgundy);
+    }
+    .size-btn.is-sold-out {
+      opacity: 0.4;
+      pointer-events: none;
+      text-decoration: line-through;
+    }
+    .stock-tag {
+      font-size: 0.8rem;
+      color: var(--color-success);
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+    .qty-cta-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .qty-stepper {
+      display: flex;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+      height: 48px;
+    }
+    .qty-stepper button {
+      width: 42px;
+      font-size: 1.1rem;
+    }
+    .qty-stepper input {
+      width: 48px;
+      text-align: center;
+      border: none;
+      outline: none;
+    }
+    /* Tabs */
+    .tabs-header {
+      display: flex;
+      border-bottom: 1px solid var(--color-border);
+      margin-top: 2.5rem;
+    }
+    .tab-btn {
+      padding: 0.85rem 1.5rem;
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      border-bottom: 2px solid transparent;
+      color: var(--color-text-muted);
+    }
+    .tab-btn.active {
+      color: var(--color-burgundy);
+      border-color: var(--color-burgundy);
+      font-weight: 600;
+    }
+    .tab-body {
+      padding: 1.5rem 0;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+      line-height: 1.8;
+      display: none;
+    }
+    .tab-body.active {
+      display: block;
+    }
+    /* Sticky Mobile Add to Cart Bar */
+    .mobile-sticky-cart {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-cream-soft);
+      border-top: 1px solid var(--color-border);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      z-index: 90;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+    }
+    @media (min-width: 992px) {
+      .mobile-sticky-cart {
+        display: none;
+      }
+    }
+    /* Size Guide Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30,27,24,0.6);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-smooth);
+    }
+    .modal-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--color-cream-soft);
+      max-width: 620px;
+      width: 100%;
+      padding: 2rem;
+      border: 1px solid var(--color-border);
+      position: relative;
+    }
+    .size-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+    .size-table th, .size-table td {
+      border: 1px solid var(--color-border);
+      padding: 0.6rem;
+      text-align: center;
+    }
+    .size-table th {
+      background: var(--color-burgundy);
+      color: var(--color-white);
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container">
+      <div class="product-page-layout">
+        <!-- Gallery -->
+        <div class="gallery-container">
+          <div class="gallery-thumbs" id="gallery-thumbs"></div>
+          <div class="gallery-main" id="gallery-main-box">
+            <img src="" alt="Dress Preview" id="gallery-main-img">
+          </div>
+        </div>
+
+        <!-- Product Purchase Information -->
+        <div class="product-details-col">
+          <span class="product-sku" id="product-sku-label">SKU: --</span>
+          <h1 class="product-title font-serif" id="product-title-el">Loading...</h1>
+          
+          <div class="price-wrap">
+            <span class="price-main" id="product-price-el">৳0</span>
+            <span class="price-strike" id="product-saleprice-el" style="display: none;"></span>
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.7; margin-bottom: 1.5rem;" id="product-short-desc"></p>
+
+          <!-- Size Selector -->
+          <div class="selector-block">
+            <div class="selector-header">
+              <strong>Select Size:</strong>
+              <span class="size-guide-trigger" onclick="openSizeModal()">View Size Guide (Inches)</span>
+            </div>
+            <div class="size-options" id="size-options-container"></div>
+            <div class="stock-tag" id="stock-status-el"></div>
+          </div>
+
+          <!-- Quantity and Action Buttons -->
+          <div class="qty-cta-row">
+            <div class="qty-stepper">
+              <button onclick="adjustQuantity(-1)">-</button>
+              <input type="number" id="qty-input" value="1" min="1" readonly>
+              <button onclick="adjustQuantity(1)">+</button>
+            </div>
+            <button class="btn btn-primary" style="flex: 1;" onclick="handleAddToCart()">
+              Add to Shopping Bag
+            </button>
+            <button class="btn btn-outline" style="padding-inline: 1rem;" onclick="handleWishlistToggle(this)">
+              ♥
+            </button>
+          </div>
+
+          <button class="btn btn-gold" style="width: 100%; margin-bottom: 1rem;" onclick="handleBuyNow()">
+            Buy It Now (Direct Checkout)
+          </button>
+
+          <p style="font-size: 0.82rem; text-align: center; color: var(--color-text-muted);">
+            Need a custom fit? <a href="custom-size.html" style="color: var(--color-burgundy); text-decoration: underline;">Request Custom Sizing for this design</a>
+          </p>
+
+          <!-- Tabs: Description, Fabric & Care, Delivery -->
+          <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-desc')">Description</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-fabric')">Fabric & Care</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-delivery')">Delivery & Returns</button>
+          </div>
+          <div class="tab-body active" id="tab-desc"></div>
+          <div class="tab-body" id="tab-fabric"></div>
+          <div class="tab-body" id="tab-delivery">
+            <p><strong>Inside Dhaka:</strong> ৳80 delivery charge (2-3 business days).</p>
+            <p><strong>Outside Dhaka:</strong> ৳150 delivery charge (3-5 business days).</p>
+            <p style="margin-top: 0.5rem;">Cash on Delivery is available across Bangladesh. Check parcel upon delivery.</p>
+          </div>
+
+          <!-- Reviews Section (Strictly hidden when 0 reviews exist) -->
+          <div id="product-reviews-container" style="display: none; margin-top: 2rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Mobile Add to Cart Bar -->
+    <div class="mobile-sticky-cart">
+      <div>
+        <div style="font-size: 0.75rem; color: var(--color-text-muted);" id="mobile-sticky-title">Dress</div>
+        <div style="font-weight: 600; color: var(--color-burgundy);" id="mobile-sticky-price">৳0</div>
+      </div>
+      <button class="btn btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.8rem;" onclick="handleAddToCart()">
+        + Add to Bag
+      </button>
+    </div>
+
+    <!-- Size Guide Modal -->
+    <div class="modal-overlay" id="size-modal-overlay">
+      <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 class="font-serif text-burgundy">Women's Standard Size Guide</h3>
+          <button class="icon-btn" onclick="closeSizeModal()">✕</button>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted);">All measurements are in inches. For custom tailoring, visit our custom size page.</p>
+        <table class="size-table">
+          <thead>
+            <tr>
+              <th>Size</th>
+              <th>Bust</th>
+              <th>Waist</th>
+              <th>Hip</th>
+              <th>Kameez Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>XS</td><td>34"</td><td>28"</td><td>36"</td><td>40"</td></tr>
+            <tr><td>S</td><td>36"</td><td>30"</td><td>38"</td><td>41"</td></tr>
+            <tr><td>M</td><td>38"</td><td>32"</td><td>41"</td><td>42"</td></tr>
+            <tr><td>L</td><td>41"</td><td>35"</td><td>44"</td><td>42"</td></tr>
+            <tr><td>XL</td><td>44"</td><td>38"</td><td>47"</td><td>43"</td></tr>
+            <tr><td>XXL</td><td>47"</td><td>41"</td><td>50"</td><td>43"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let activeProduct = null;
+    let selectedVariant = null;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get("slug") || "embroidered-three-piece-suit-beige";
+      try {
+        activeProduct = await API.getProduct(slug);
+        renderProductDetails();
+      } catch (err) {
+        document.querySelector(".product-page-layout").innerHTML = `
+          <div style="text-align: center; padding: 5rem 1rem;">
+            <h2>Product Not Found</h2>
+            <p>The requested dress could not be located.</p>
+            <a href="collection.html" class="btn btn-primary" style="margin-top: 1rem;">Back to Collection</a>
+          </div>
+        `;
+      }
+    });
+
+    function renderProductDetails() {
+      document.title = `${activeProduct.name} | Oronno Fashion`;
+      document.getElementById("product-title-el").textContent = activeProduct.name;
+      document.getElementById("product-short-desc").textContent = activeProduct.description;
+      document.getElementById("tab-desc").textContent = activeProduct.description;
+      document.getElementById("tab-fabric").innerHTML = `
+        <p><strong>Fabric Composition:</strong> ${activeProduct.fabric}</p>
+        <p style="margin-top: 0.5rem;"><strong>Washing & Care Instructions:</strong> ${activeProduct.care}</p>
+      `;
+
+      const price = activeProduct.salePrice || activeProduct.price;
+      document.getElementById("product-price-el").textContent = `৳${price.toLocaleString()}`;
+      document.getElementById("mobile-sticky-price").textContent = `৳${price.toLocaleString()}`;
+      document.getElementById("mobile-sticky-title").textContent = activeProduct.name;
+
+      if (activeProduct.salePrice) {
+        const saleEl = document.getElementById("product-saleprice-el");
+        saleEl.textContent = `৳${activeProduct.price.toLocaleString()}`;
+        saleEl.style.display = "inline";
+      }
+
+      // Render Gallery
+      const mainImg = document.getElementById("gallery-main-img");
+      mainImg.src = activeProduct.images[0];
+      const thumbsBox = document.getElementById("gallery-thumbs");
+      thumbsBox.innerHTML = activeProduct.images.map((img, idx) => `
+        <button class="gallery-thumb-btn ${idx === 0 ? 'active' : ''}" onclick="switchGalleryImg('${img}', this)">
+          <img src="${img}" alt="Thumbnail ${idx + 1}">
+        </button>
+      `).join("");
+
+      // Gallery Zoom Click
+      const mainBox = document.getElementById("gallery-main-box");
+      mainBox.addEventListener("click", () => {
+        mainBox.classList.toggle("is-zoomed");
+      });
+
+      // Render Sizes
+      const sizesContainer = document.getElementById("size-options-container");
+      sizesContainer.innerHTML = activeProduct.variants.map((v, idx) => `
+        <button class="size-btn ${idx === 0 ? 'active' : ''} ${v.stock === 0 ? 'is-sold-out' : ''}" 
+                onclick="selectVariant('${v.sku}', this)">
+          ${v.size}
+        </button>
+      `).join("");
+
+      selectVariant(activeProduct.variants[0].sku);
+    }
+
+    function switchGalleryImg(src, btn) {
+      document.getElementById("gallery-main-img").src = src;
+      document.querySelectorAll(".gallery-thumb-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function selectVariant(sku, btn) {
+      selectedVariant = activeProduct.variants.find(v => v.sku === sku);
+      document.getElementById("product-sku-label").textContent = `SKU: ${selectedVariant.sku}`;
+      const stockEl = document.getElementById("stock-status-el");
+      if (selectedVariant.stock > 0) {
+        stockEl.textContent = `✓ In Stock (${selectedVariant.stock} available)`;
+        stockEl.style.color = "var(--color-success)";
+      } else {
+        stockEl.textContent = "Sold Out";
+        stockEl.style.color = "var(--color-error)";
+      }
+
+      if (btn) {
+        document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      }
+    }
+
+    function adjustQuantity(delta) {
+      const input = document.getElementById("qty-input");
+      let val = parseInt(input.value) + delta;
+      if (val < 1) val = 1;
+      input.value = val;
+    }
+
+    async function handleAddToCart() {
+      const qty = parseInt(document.getElementById("qty-input").value) || 1;
+      await API.addToCart(activeProduct.id, selectedVariant, qty);
+      window.dispatchEvent(new CustomEvent("oronno:opencart"));
+    }
+
+    async function handleBuyNow() {
+      const qty = parseInt(document.getElementById("qty-input").value) || 1;
+      await API.addToCart(activeProduct.id, selectedVariant, qty);
+      window.location.href = "checkout.html";
+    }
+
+    async function handleWishlistToggle(btn) {
+      const res = await API.toggleWishlist(activeProduct.id);
+      btn.style.color = res.added ? "var(--color-burgundy)" : "inherit";
+    }
+
+    function switchTab(e, tabId) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-body").forEach(t => t.classList.remove("active"));
+      e.target.classList.add("active");
+      document.getElementById(tabId).classList.add("active");
+    }
+
+    function openSizeModal() {
+      document.getElementById("size-modal-overlay").classList.add("is-open");
+    }
+    function closeSizeModal() {
+      document.getElementById("size-modal-overlay").classList.remove("is-open");
+    }
+  </script>
+</body>
+</html>

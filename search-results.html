@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results | Oronno Fashion</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container" style="padding-block: 3.5rem 5rem;">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto 3rem auto;">
+        <span class="text-gold" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em;">Catalogue Search</span>
+        <h1 class="font-serif" style="font-size: 2.4rem; margin-top: 0.5rem;" id="search-title">Search Results</h1>
+        <p style="color: var(--color-text-muted);" id="search-subtitle">Searching dresses...</p>
+      </div>
+
+      <div class="product-grid" id="search-results-grid"></div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get("q") || "";
+      
+      document.getElementById("search-title").textContent = `Results for "${query}"`;
+      const matches = await API.searchProducts(query);
+      const container = document.getElementById("search-results-grid");
+      const subEl = document.getElementById("search-subtitle");
+
+      subEl.textContent = `Found ${matches.length} matching design${matches.length === 1 ? '' : 's'}`;
+
+      if (matches.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem;">
+            <p style="color: var(--color-text-muted); margin-bottom: 1.5rem;">No dresses matched your search terms. Browse our collections instead.</p>
+            <a href="collection.html" class="btn btn-primary">Browse All Collections</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = matches.map(product => `
+        <article class="product-card">
+          <div class="product-image-box">
+            <a href="product.html?slug=${product.slug}">
+              <img src="${product.images[0]}" alt="${product.name}" class="product-image-primary" loading="lazy">
+              <img src="${product.images[1]}" alt="${product.name}" class="product-image-secondary" loading="lazy">
+            </a>
+          </div>
+          <div class="product-info">
+            <span class="product-cat-tag">${product.category}</span>
+            <a href="product.html?slug=${product.slug}" class="product-name-link">${product.name}</a>
+            <p class="product-fabric-preview">${product.fabric}</p>
+            <div class="product-price-row">
+              <span class="current-price">৳${(product.salePrice || product.price).toLocaleString()}</span>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    });
+  </script>
+</body>
+</html>

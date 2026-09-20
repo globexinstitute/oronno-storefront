@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Account | Oronno Fashion</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .auth-card {
+      max-width: 480px;
+      margin: 3.5rem auto 5rem auto;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      padding: 2.5rem;
+    }
+    .auth-tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 2rem;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 0.75rem;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      text-align: center;
+      border-bottom: 2px solid transparent;
+      color: var(--color-text-muted);
+    }
+    .auth-tab.active {
+      color: var(--color-burgundy);
+      border-color: var(--color-burgundy);
+      font-weight: 600;
+    }
+    .account-dashboard {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-block: 3rem 5rem;
+    }
+    @media (min-width: 768px) {
+      .account-dashboard {
+        grid-template-columns: 280px 1fr;
+      }
+    }
+    .dash-sidebar {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      padding: 1.5rem;
+      height: fit-content;
+    }
+    .order-history-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container">
+      <!-- State 1: Unauthenticated (Login / Register) -->
+      <div id="auth-container">
+        <div class="auth-card">
+          <div class="auth-tab-bar">
+            <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+            <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="form-login" onsubmit="handleLogin(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <label style="font-size:0.85rem; font-weight:500;">Phone Number or Email</label>
+                <input type="text" id="login-id" required placeholder="01881896612" style="width:100%; padding:0.75rem; border:1px solid var(--color-border);">
+              </div>
+              <div>
+                <label style="font-size:0.85rem; font-weight:500;">Password</label>
+                <input type="password" id="login-pass" required placeholder="••••••••" style="width:100%; padding:0.75rem; border:1px solid var(--color-border);">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+          </form>
+
+          <!-- Register Form -->
+          <form id="form-register" style="display:none;" onsubmit="handleRegister(event)">
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+              <div>
+                <label style="font-size:0.85rem; font-weight:500;">Full Name</label>
+                <input type="text" id="reg-name" required placeholder="Nusrat Jahan" style="width:100%; padding:0.75rem; border:1px solid var(--color-border);">
+              </div>
+              <div>
+                <label style="font-size:0.85rem; font-weight:500;">Mobile Phone Number</label>
+                <input type="tel" id="reg-phone" required placeholder="01881896612" style="width:100%; padding:0.75rem; border:1px solid var(--color-border);">
+              </div>
+              <div>
+                <label style="font-size:0.85rem; font-weight:500;">Password</label>
+                <input type="password" id="reg-pass" required placeholder="••••••••" style="width:100%; padding:0.75rem; border:1px solid var(--color-border);">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- State 2: Authenticated Customer Dashboard -->
+      <div id="dashboard-container" style="display:none;">
+        <div class="account-dashboard">
+          <aside class="dash-sidebar">
+            <h3 class="font-serif text-burgundy" id="user-display-name">Valued Customer</h3>
+            <p style="font-size:0.85rem; color:var(--color-text-muted); margin-bottom: 1.5rem;" id="user-display-phone">01881896612</p>
+            <button class="btn btn-outline" style="width:100%; font-size:0.75rem;" onclick="handleLogout()">Sign Out</button>
+          </aside>
+
+          <section>
+            <h2 class="font-serif" style="font-size: 1.8rem; margin-bottom: 1.5rem;">Past Orders & Deliveries</h2>
+            <div id="user-orders-list"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      await checkAuth();
+    });
+
+    async function checkAuth() {
+      const user = await API.getAccount();
+      if (user) {
+        document.getElementById("auth-container").style.display = "none";
+        document.getElementById("dashboard-container").style.display = "block";
+        document.getElementById("user-display-name").textContent = user.name;
+        document.getElementById("user-display-phone").textContent = user.phone || user.email;
+        await renderOrders();
+      } else {
+        document.getElementById("auth-container").style.display = "block";
+        document.getElementById("dashboard-container").style.display = "none";
+      }
+    }
+
+    function switchAuthTab(type) {
+      document.querySelectorAll(".auth-tab").forEach(t => t.classList.remove("active"));
+      if (type === "login") {
+        document.querySelectorAll(".auth-tab")[0].classList.add("active");
+        document.getElementById("form-login").style.display = "block";
+        document.getElementById("form-register").style.display = "none";
+      } else {
+        document.querySelectorAll(".auth-tab")[1].classList.add("active");
+        document.getElementById("form-login").style.display = "none";
+        document.getElementById("form-register").style.display = "block";
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById("login-id").value;
+      const pass = document.getElementById("login-pass").value;
+      await API.login(id, pass);
+      await checkAuth();
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById("reg-name").value;
+      const phone = document.getElementById("reg-phone").value;
+      const pass = document.getElementById("reg-pass").value;
+      await API.register({ name, phone, password: pass });
+      await checkAuth();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem(API._USER_KEY);
+      window.location.reload();
+    }
+
+    async function renderOrders() {
+      const orders = await API.getOrders();
+      const box = document.getElementById("user-orders-list");
+
+      if (!orders || orders.length === 0) {
+        box.innerHTML = `<div style="background:var(--color-white); padding:2rem; border:1px solid var(--color-border); text-align:center; color:var(--color-text-muted);">No orders recorded yet.</div>`;
+        return;
+      }
+
+      box.innerHTML = orders.map(o => `
+        <div class="order-history-card">
+          <div style="display:flex; justify-content:space-between; margin-bottom: 0.75rem;">
+            <strong>Ref: ${o.orderNumber}</strong>
+            <span style="color:var(--color-burgundy); font-weight:600;">Status: ${o.status}</span>
+          </div>
+          <p style="font-size:0.85rem; color:var(--color-text-muted); margin-bottom: 0.5rem;">Date: ${new Date(o.createdAt).toLocaleDateString()}</p>
+          <div style="font-size:0.85rem; margin-bottom: 0.75rem;">
+            ${o.items.map(i => `${i.product?.name} (Size: ${i.size}) × ${i.quantity}`).join("<br>")}
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top: 1px solid var(--color-border); padding-top:0.5rem; font-weight:600;">
+            <span>Total: ৳${o.total.toLocaleString()}</span>
+            <a href="track-order.html?orderNumber=${o.orderNumber}" style="color:var(--color-gold); font-size:0.85rem; text-decoration:underline;">Track Order →</a>
+          </div>
+        </div>
+      `).join("");
+    }
+  </script>
+</body>
+</html>

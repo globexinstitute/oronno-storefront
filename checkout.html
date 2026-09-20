@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Order | Oronno Fashion</title>
+  <meta name="description" content="Fast, seamless checkout for Pakistani dresses. Cash on delivery, bKash, and card accepted across Bangladesh.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding-block: 3rem 5rem;
+    }
+    @media (min-width: 992px) {
+      .checkout-grid {
+        grid-template-columns: 1.7fr 1.2fr;
+      }
+    }
+    .form-section {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .form-section-title {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-burgundy);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (min-width: 600px) {
+      .form-row.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .form-field label {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .form-field input, .form-field select, .form-field textarea {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-cream-soft);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: var(--color-burgundy);
+      background: var(--color-white);
+    }
+    .field-error {
+      color: var(--color-error);
+      font-size: 0.75rem;
+      display: none;
+    }
+    /* Payment selection tiles */
+    .payment-options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 600px) {
+      .payment-options-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .payment-tile {
+      border: 1px solid var(--color-border);
+      padding: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: all var(--transition-fast);
+      background: var(--color-cream-soft);
+    }
+    .payment-tile.active {
+      border-color: var(--color-burgundy);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
+    }
+    .payment-tile input[type="radio"] {
+      margin-top: 3px;
+      accent-color: var(--color-burgundy);
+    }
+    .order-review-box {
+      background: var(--color-cream-soft);
+      border: 1px solid var(--color-border);
+      padding: 2rem;
+      height: fit-content;
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container">
+      <div style="padding-top: 2.5rem; text-align: center;">
+        <span class="text-gold" style="font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;">Direct Boutique Checkout</span>
+        <h1 class="font-serif" style="font-size: 2.4rem; margin-top: 0.35rem;">Complete Your Order</h1>
+      </div>
+
+      <form id="checkout-form" onsubmit="handlePlaceOrder(event)" novalidate>
+        <div class="checkout-grid">
+          <!-- Left: Information & Address -->
+          <div>
+            <!-- Contact -->
+            <div class="form-section">
+              <h3 class="form-section-title font-serif">1. Contact & Customer Details</h3>
+              <div class="form-row two-col">
+                <div class="form-field">
+                  <label for="cust-name">Full Name <span style="color:red;">*</span></label>
+                  <input type="text" id="cust-name" required placeholder="e.g. Nusrat Jahan">
+                  <span class="field-error" id="err-name">Please enter your full name. / আপনার পুরো নাম লিখুন।</span>
+                </div>
+                <div class="form-field">
+                  <label for="cust-phone">Phone Number (11 Digits) <span style="color:red;">*</span></label>
+                  <input type="tel" id="cust-phone" required placeholder="01881896612">
+                  <span class="field-error" id="err-phone">Enter a valid 11-digit Bangladesh phone number. / সঠিক ১১ ডিজিটের ফোন নম্বর দিন।</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="cust-email">Email Address (Optional for Order Confirmation)</label>
+                <input type="email" id="cust-email" placeholder="nusrat@example.com">
+              </div>
+            </div>
+
+            <!-- Shipping Destination -->
+            <div class="form-section">
+              <h3 class="form-section-title font-serif">2. Delivery Address (Bangladesh)</h3>
+              <div class="form-row two-col">
+                <div class="form-field">
+                  <label for="cust-district">District <span style="color:red;">*</span></label>
+                  <select id="cust-district" required onchange="handleDistrictChange(this.value)">
+                    <option value="">Select District</option>
+                    <option value="Dhaka">Dhaka</option>
+                    <option value="Chattogram">Chattogram</option>
+                    <option value="Sylhet">Sylhet</option>
+                    <option value="Rajshahi">Rajshahi</option>
+                    <option value="Khulna">Khulna</option>
+                    <option value="Barishal">Barishal</option>
+                    <option value="Rangpur">Rangpur</option>
+                    <option value="Mymensingh">Mymensingh</option>
+                    <option value="Other">Other District</option>
+                  </select>
+                  <span class="field-error" id="err-district">Select your delivery district. / জেলা নির্বাচন করুন।</span>
+                </div>
+                <div class="form-field">
+                  <label for="cust-area">Police Station / Thana / Area <span style="color:red;">*</span></label>
+                  <input type="text" id="cust-area" required placeholder="e.g. Donia / Jatrabari / Gulshan">
+                  <span class="field-error" id="err-area">Provide your area or thana. / থানা বা এলাকা লিখুন।</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="cust-address">Detailed Street Address / House / Road <span style="color:red;">*</span></label>
+                <textarea id="cust-address" rows="3" required placeholder="e.g. House #14, Road #4, Donia, Dhaka 1236"></textarea>
+                <span class="field-error" id="err-address">Please provide full delivery address. / সম্পূর্ণ ঠিকানা লিখুন।</span>
+              </div>
+              <div class="form-field" style="margin-top: 1rem;">
+                <label for="cust-notes">Special Delivery Notes (Optional)</label>
+                <input type="text" id="cust-notes" placeholder="e.g. Call before delivery, specific gate number">
+              </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="form-section">
+              <h3 class="form-section-title font-serif">3. Select Payment Method</h3>
+              <div class="payment-options-grid" id="payment-methods-box">
+                <!-- Injected via API.getSettings() -->
+              </div>
+              <span class="field-error" id="err-payment" style="margin-top: 0.5rem;">Select a payment option. / পেমেন্ট মাধ্যম বেছে নিন।</span>
+            </div>
+          </div>
+
+          <!-- Right: Order Review Column -->
+          <div>
+            <div class="order-review-box">
+              <h3 class="font-serif" style="font-size: 1.3rem; margin-bottom: 1.25rem;">Items in Order</h3>
+              <div id="checkout-items-list" style="max-height: 280px; overflow-y: auto; margin-bottom: 1.5rem;"></div>
+
+              <div style="border-top: 1px solid var(--color-border); padding-top: 1rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.9rem;">
+                  <span>Subtotal:</span>
+                  <span id="chk-subtotal">৳0</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.9rem;">
+                  <span>Delivery Charge (<span id="chk-zone-label">Dhaka</span>):</span>
+                  <span id="chk-delivery">৳80</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size: 1.2rem; font-weight: 700; color: var(--color-burgundy); border-top: 1px solid var(--color-border); padding-top: 0.75rem; margin-top: 0.5rem;">
+                  <span>Total Payable:</span>
+                  <span id="chk-grand-total">৳0</span>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem; font-size: 0.9rem;" id="btn-place-order">
+                Confirm & Place Order
+              </button>
+
+              <p style="font-size: 0.78rem; text-align: center; color: var(--color-text-muted); margin-top: 1rem;">
+                By placing this order, you agree to our 7-day inspection and exchange policy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let cartData = null;
+    let selectedPayment = "cod";
+    let deliveryFee = 80;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      cartData = await API.getCart();
+      if (!cartData.items || cartData.items.length === 0) {
+        window.location.href = "cart.html";
+        return;
+      }
+      await renderPaymentMethods();
+      renderReviewItems();
+    });
+
+    async function renderPaymentMethods() {
+      const settings = await API.getSettings();
+      const container = document.getElementById("payment-methods-box");
+      container.innerHTML = settings.paymentMethods.map((pm, idx) => `
+        <label class="payment-tile ${idx === 0 ? 'active' : ''}" onclick="selectPaymentTile(this, '${pm.id}')">
+          <input type="radio" name="payment-method" value="${pm.id}" ${idx === 0 ? 'checked' : ''}>
+          <div>
+            <strong style="display:block; font-size:0.9rem; color:var(--color-burgundy);">${pm.name}</strong>
+            <span style="font-size:0.75rem; color:var(--color-text-muted);">${pm.description}</span>
+          </div>
+        </label>
+      `).join("");
+    }
+
+    function selectPaymentTile(labelEl, id) {
+      document.querySelectorAll(".payment-tile").forEach(l => l.classList.remove("active"));
+      labelEl.classList.add("active");
+      selectedPayment = id;
+    }
+
+    function renderReviewItems() {
+      const listEl = document.getElementById("checkout-items-list");
+      listEl.innerHTML = cartData.items.map(item => `
+        <div style="display: flex; gap: 0.75rem; margin-bottom: 0.85rem; align-items: center;">
+          <img src="${item.product?.images[0]}" style="width: 48px; height: 60px; object-fit: cover;">
+          <div style="flex:1; font-size: 0.85rem;">
+            <h5 style="color: var(--color-burgundy);">${item.product?.name}</h5>
+            <span style="color: var(--color-text-muted); font-size: 0.75rem;">Size: ${item.size} × ${item.quantity}</span>
+          </div>
+          <strong style="font-size: 0.88rem;">৳${item.itemTotal.toLocaleString()}</strong>
+        </div>
+      `).join("");
+
+      document.getElementById("chk-subtotal").textContent = `৳${cartData.subtotal.toLocaleString()}`;
+      updateGrandTotal();
+    }
+
+    function handleDistrictChange(val) {
+      if (val.toLowerCase() === "dhaka") {
+        deliveryFee = 80;
+        document.getElementById("chk-zone-label").textContent = "Inside Dhaka";
+      } else {
+        deliveryFee = 150;
+        document.getElementById("chk-zone-label").textContent = "Outside Dhaka";
+      }
+      document.getElementById("chk-delivery").textContent = `৳${deliveryFee}`;
+      updateGrandTotal();
+    }
+
+    function updateGrandTotal() {
+      const grandTotal = cartData.subtotal + deliveryFee;
+      document.getElementById("chk-grand-total").textContent = `৳${grandTotal.toLocaleString()}`;
+    }
+
+    async function handlePlaceOrder(e) {
+      e.preventDefault();
+      let valid = true;
+
+      const name = document.getElementById("cust-name").value.trim();
+      const phone = document.getElementById("cust-phone").value.trim();
+      const district = document.getElementById("cust-district").value;
+      const area = document.getElementById("cust-area").value.trim();
+      const address = document.getElementById("cust-address").value.trim();
+      const email = document.getElementById("cust-email").value.trim();
+      const notes = document.getElementById("cust-notes").value.trim();
+
+      // Reset errors
+      document.querySelectorAll(".field-error").forEach(el => el.style.display = "none");
+
+      if (name.length < 2) {
+        document.getElementById("err-name").style.display = "block";
+        valid = false;
+      }
+      const phoneClean = phone.replace(/[^0-9]/g, "");
+      if (phoneClean.length !== 11 || !phoneClean.startsWith("01")) {
+        document.getElementById("err-phone").style.display = "block";
+        valid = false;
+      }
+      if (!district) {
+        document.getElementById("err-district").style.display = "block";
+        valid = false;
+      }
+      if (area.length < 2) {
+        document.getElementById("err-area").style.display = "block";
+        valid = false;
+      }
+      if (address.length < 5) {
+        document.getElementById("err-address").style.display = "block";
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      const btn = document.getElementById("btn-place-order");
+      btn.disabled = true;
+      btn.textContent = "Processing Order...";
+
+      const orderPayload = {
+        customer: { name, phone, email },
+        shippingAddress: { district, area, fullAddress: address, notes },
+        items: cartData.items,
+        deliveryFee,
+        subtotal: cartData.subtotal,
+        total: cartData.subtotal + deliveryFee,
+        paymentMethod: selectedPayment
+      };
+
+      try {
+        const createdOrder = await API.createOrder(orderPayload);
+        sessionStorage.setItem("last_order_details", JSON.stringify(createdOrder));
+        window.location.href = `order-success.html?orderNumber=${createdOrder.orderNumber}`;
+      } catch (err) {
+        alert("Error creating order: " + err.message);
+        btn.disabled = false;
+        btn.textContent = "Confirm & Place Order";
+      }
+    }
+  </script>
+</body>
+</html>

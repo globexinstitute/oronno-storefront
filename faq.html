@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions | Oronno Fashion</title>
+  <meta name="description" content="Common questions regarding ordering Pakistani suits, delivery timelines, payment options, and custom sizing at Oronno Fashion.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .faq-container {
+      max-width: 760px;
+      margin: 3.5rem auto 5rem auto;
+    }
+    .faq-item {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .faq-trigger {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--color-burgundy);
+    }
+    .faq-content {
+      padding: 0 1.5rem 1.25rem 1.5rem;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      display: none;
+    }
+    .faq-item.is-active .faq-content {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container">
+      <div style="padding-top: 3rem; text-align: center;">
+        <span class="text-gold" style="font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;">Customer Guidance</span>
+        <h1 class="font-serif" style="font-size: 2.4rem; margin-top: 0.35rem;">Frequently Asked Questions</h1>
+      </div>
+
+      <div class="faq-container">
+        <!-- FAQ 1 -->
+        <div class="faq-item is-active">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span>Are the dresses genuine Pakistani designs?</span>
+            <span>▾</span>
+          </button>
+          <div class="faq-content">
+            Yes. Every design in our Casual, Festive, and Luxury collections is carefully selected for authentic aesthetics, high-grade embroidery techniques (such as resham, zari, and laser cutwork), and premium fabrics including lawn, georgette, and pure crinkle chiffon.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span>What are the delivery charges and timelines?</span>
+            <span>▾</span>
+          </button>
+          <div class="faq-content">
+            Inside Dhaka: ৳80 delivery charge (usually delivered within 2–3 business days). Outside Dhaka: ৳150 delivery charge (delivered within 3–5 business days across all 64 districts via Steadfast and Pathao couriers).
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span>How does Custom Sizing work?</span>
+            <span>▾</span>
+          </button>
+          <div class="faq-content">
+            If our standard XS–XXL sizes do not fit your measurements, you can submit your exact body specifications (kameez length, bust, waist, hip, sleeves, and trouser length) through our <a href="custom-size.html" style="color:var(--color-burgundy); text-decoration:underline;">Custom Size Request form</a>. Our master tailor will contact you via WhatsApp to confirm details before stitching.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span>Can I pay with Cash on Delivery (COD)?</span>
+            <span>▾</span>
+          </button>
+          <div class="faq-content">
+            Yes, Cash on Delivery is available nationwide. You can inspect the package condition upon arrival and pay the delivery courier directly.
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item">
+          <button class="faq-trigger" onclick="toggleFaq(this)">
+            <span>Can I place my order through Facebook or WhatsApp?</span>
+            <span>▾</span>
+          </button>
+          <div class="faq-content">
+            Absolutely! You can order directly on our website or take a screenshot of your preferred dress and send it to our Facebook page inbox or our official WhatsApp hotline at <strong>01881896612</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      item.classList.toggle("is-active");
+    }
+  </script>
+</body>
+</html>

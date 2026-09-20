@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Sizing Service | Oronno Fashion</title>
+  <meta name="description" content="Request tailored boutique sizing for our Pakistani and ethnic dress collections. Precision fitted by Dhaka artisans.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .custom-layout {
+      max-width: 780px;
+      margin: 3.5rem auto 5rem auto;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      padding: clamp(1.5rem, 5vw, 3rem);
+    }
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 600px) {
+      .spec-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .spec-input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .spec-input-box label {
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .spec-input-box input {
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-cream-soft);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container">
+      <div class="custom-layout">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <span class="text-gold" style="font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;">Tailored Grace</span>
+          <h1 class="font-serif" style="font-size: 2.3rem; margin-top: 0.35rem;">Custom Sizing Request</h1>
+          <p style="font-size: 0.9rem; color: var(--color-text-muted); max-width: 580px; margin: 0.5rem auto 0 auto;">
+            Our Dhaka tailoring master cuts and stitches our curated dresses to match your exact proportions. All measurements are in inches.
+          </p>
+        </div>
+
+        <form id="custom-size-form" onsubmit="handleCustomSizeSubmit(event)">
+          <!-- Select Outfit -->
+          <div style="margin-bottom: 1.75rem;">
+            <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom: 0.4rem;">Select Dress Design <span style="color:red;">*</span></label>
+            <select id="cs-product-select" required style="width:100%; padding:0.75rem; border:1px solid var(--color-border); background:var(--color-cream-soft); font-size:0.9rem;">
+              <option value="">Choose an outfit from our collection</option>
+              <option value="casual-01">Embroidered Three-Piece Suit - Beige (Casual)</option>
+              <option value="casual-02">Embroidered Three-Piece Suit - Teal (Casual)</option>
+              <option value="festive-01">Embroidered Three-Piece Suit - Blush Pink (Festive)</option>
+              <option value="festive-02">Embroidered Long Kameez - Ivory White (Festive)</option>
+              <option value="luxury-01">Embroidered Kameez - Deep Red (Luxury)</option>
+              <option value="luxury-02">Embroidered Three-Piece Suit - Ice Blue (Luxury)</option>
+            </select>
+          </div>
+
+          <h3 class="font-serif text-burgundy" style="font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.4rem;">
+            Body Measurements (Inches)
+          </h3>
+
+          <div class="spec-grid">
+            <div class="spec-input-box">
+              <label>Kameez Length (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-kameez-len" placeholder="e.g. 42" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Bust / Chest (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-bust" placeholder="e.g. 38" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Waist (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-waist" placeholder="e.g. 32" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Hip (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-hip" placeholder="e.g. 41" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Shoulder Width (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-shoulder" placeholder="e.g. 14.5" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Sleeve Length (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-sleeve" placeholder="e.g. 21" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Armhole (ইঞ্চি)</label>
+              <input type="number" step="0.5" id="cs-armhole" placeholder="e.g. 17">
+            </div>
+            <div class="spec-input-box">
+              <label>Trouser / Salwar Length</label>
+              <input type="number" step="0.5" id="cs-pant-len" placeholder="e.g. 38" required>
+            </div>
+            <div class="spec-input-box">
+              <label>Pant Opening (Mori)</label>
+              <input type="number" step="0.5" id="cs-pant-bottom" placeholder="e.g. 13">
+            </div>
+          </div>
+
+          <h3 class="font-serif text-burgundy" style="font-size: 1.2rem; margin-block: 1.5rem 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.4rem;">
+            Customer Contact
+          </h3>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom: 1.5rem;">
+            <div class="spec-input-box">
+              <label>Your Name</label>
+              <input type="text" id="cs-name" required placeholder="e.g. Nusrat">
+            </div>
+            <div class="spec-input-box">
+              <label>Phone or WhatsApp Number</label>
+              <input type="tel" id="cs-phone" required placeholder="01881896612">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.75rem;">
+            <label style="display:block; font-size:0.85rem; font-weight:500; margin-bottom: 0.4rem;">Additional Fitting or Lining Notes</label>
+            <textarea id="cs-notes" rows="3" placeholder="e.g. Full inner sleeve lining required, boat neckline preference" style="width:100%; padding:0.75rem; border:1px solid var(--color-border); background:var(--color-cream-soft);"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%; font-size: 0.9rem;" id="btn-submit-cs">
+            Submit Custom Sizing Request
+          </button>
+        </form>
+
+        <div id="cs-success-state" style="display:none; text-align:center; padding: 2rem 0;">
+          <h3 class="font-serif text-burgundy" style="font-size:1.8rem; margin-bottom:0.5rem;">Request Registered</h3>
+          <p style="color:var(--color-text-muted); margin-bottom:1.5rem;" id="cs-ticket-label">Ticket ID: CS-0000</p>
+          <a href="https://wa.me/8801881896612" target="_blank" rel="noopener" class="btn btn-gold">
+            Chat on WhatsApp with Tailoring Team
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    async function handleCustomSizeSubmit(e) {
+      e.preventDefault();
+      const data = {
+        dress: document.getElementById("cs-product-select").value,
+        measurements: {
+          kameezLength: document.getElementById("cs-kameez-len").value,
+          bust: document.getElementById("cs-bust").value,
+          waist: document.getElementById("cs-waist").value,
+          hip: document.getElementById("cs-hip").value,
+          shoulder: document.getElementById("cs-shoulder").value,
+          sleeve: document.getElementById("cs-sleeve").value,
+          armhole: document.getElementById("cs-armhole").value,
+          trouserLength: document.getElementById("cs-pant-len").value,
+          bottomOpening: document.getElementById("cs-pant-bottom").value
+        },
+        customer: {
+          name: document.getElementById("cs-name").value,
+          phone: document.getElementById("cs-phone").value,
+          notes: document.getElementById("cs-notes").value
+        }
+      };
+
+      const btn = document.getElementById("btn-submit-cs");
+      btn.disabled = true;
+      btn.textContent = "Submitting Measurements...";
+
+      const res = await API.submitCustomSizeRequest(data);
+      document.getElementById("custom-size-form").style.display = "none";
+      const successState = document.getElementById("cs-success-state");
+      document.getElementById("cs-ticket-label").textContent = `Ticket: ${res.ticketId} — Our tailor will verify via ${data.customer.phone}`;
+      successState.style.display = "block";
+    }
+  </script>
+</body>
+</html>

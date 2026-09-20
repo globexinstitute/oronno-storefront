@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed | Oronno Fashion</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .success-card {
+      max-width: 680px;
+      margin: 3.5rem auto 5rem auto;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      padding: clamp(1.5rem, 5vw, 3rem);
+      text-align: center;
+    }
+    .check-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--color-gold-subtle);
+      border: 2px solid var(--color-gold);
+      color: var(--color-burgundy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem auto;
+    }
+    .order-details-box {
+      background: var(--color-cream-soft);
+      border: 1px solid var(--color-border);
+      padding: 1.5rem;
+      margin-block: 2rem;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container">
+      <div class="success-card">
+        <div class="check-badge">✓</div>
+        <span class="text-gold" style="font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;">Order Successful</span>
+        <h1 class="font-serif" style="font-size: 2.3rem; margin-top: 0.4rem;">Thank You for Your Order</h1>
+        <p style="color: var(--color-text-muted); margin-top: 0.5rem;" id="success-lead-text">
+          We have received your dress booking. Our studio team will call or message your phone shortly to confirm packaging.
+        </p>
+
+        <div class="order-details-box" id="order-meta-box">
+          <div style="display:flex; justify-content:space-between; margin-bottom: 0.75rem;">
+            <strong>Order Reference:</strong>
+            <span id="res-order-num" style="color: var(--color-burgundy); font-weight: 700;">--</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom: 0.75rem;">
+            <strong>Recipient Phone:</strong>
+            <span id="res-order-phone">--</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom: 0.75rem;">
+            <strong>Payment Method:</strong>
+            <span id="res-order-pay">Cash on Delivery</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top: 1px solid var(--color-border); padding-top: 0.75rem;">
+            <strong>Total Amount:</strong>
+            <span id="res-order-total" style="font-size: 1.15rem; color: var(--color-burgundy); font-weight: 700;">৳0</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="index.html" class="btn btn-outline">Back to Homepage</a>
+          <a href="track-order.html" class="btn btn-primary" id="track-order-link">Track Delivery</a>
+          <a href="" target="_blank" rel="noopener" class="btn btn-gold" id="btn-whatsapp-confirm">
+            Confirm on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderNum = urlParams.get("orderNumber") || "ORN-102938";
+      const cached = sessionStorage.getItem("last_order_details");
+
+      document.getElementById("res-order-num").textContent = orderNum;
+      document.getElementById("track-order-link").href = `track-order.html?orderNumber=${orderNum}`;
+
+      let phone = "01881896612";
+      let total = "0";
+
+      if (cached) {
+        const order = JSON.parse(cached);
+        phone = order.customer.phone;
+        total = order.total.toLocaleString();
+        document.getElementById("res-order-phone").textContent = phone;
+        document.getElementById("res-order-pay").textContent = order.paymentMethod.toUpperCase();
+        document.getElementById("res-order-total").textContent = `৳${total}`;
+      }
+
+      const waMsg = encodeURIComponent(`Hello Oronno Fashion, I just placed order #${orderNum} for ৳${total}. Please confirm my dress.`);
+      document.getElementById("btn-whatsapp-confirm").href = `https://wa.me/8801881896612?text=${waMsg}`;
+    });
+  </script>
+</body>
+</html>

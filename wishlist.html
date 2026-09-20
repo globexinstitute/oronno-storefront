@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Wishlist | Oronno Fashion</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="container" style="padding-block: 3.5rem 5rem;">
+      <div style="text-align: center; margin-bottom: 2.5rem;">
+        <span class="text-gold" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em;">Your Selections</span>
+        <h1 class="font-serif" style="font-size: 2.4rem;">Saved Wishlist</h1>
+      </div>
+
+      <div class="product-grid" id="wishlist-grid"></div>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      await renderWishlist();
+    });
+
+    async function renderWishlist() {
+      const items = await API.getWishlist();
+      const container = document.getElementById("wishlist-grid");
+
+      if (!items || items.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem;">
+            <p style="color: var(--color-text-muted); font-size: 1.05rem; margin-bottom: 1.5rem;">You haven't saved any dresses to your wishlist yet.</p>
+            <a href="collection.html" class="btn btn-primary">Discover the Collection</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(product => `
+        <article class="product-card">
+          <div class="product-image-box">
+            <button class="product-wishlist-btn is-active" onclick="removeFromWishlist(${product.id})" aria-label="Remove item">
+              ✕
+            </button>
+            <a href="product.html?slug=${product.slug}">
+              <img src="${product.images[0]}" alt="${product.name}" class="product-image-primary">
+            </a>
+            <div class="product-actions-bar">
+              <a href="product.html?slug=${product.slug}" class="product-action-btn btn-action-quick">View Details</a>
+              <button class="product-action-btn btn-action-add" onclick="moveToBag(${product.id})">+ Add to Bag</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="product-cat-tag">${product.category}</span>
+            <a href="product.html?slug=${product.slug}" class="product-name-link">${product.name}</a>
+            <div class="product-price-row">
+              <span class="current-price">৳${(product.salePrice || product.price).toLocaleString()}</span>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function removeFromWishlist(id) {
+      await API.toggleWishlist(id);
+      await renderWishlist();
+    }
+
+    async function moveToBag(id) {
+      const product = (await API.getWishlist()).find(p => p.id === id);
+      if (!product) return;
+      const v = product.variants.find(i => i.stock > 0) || product.variants[0];
+      await API.addToCart(product.id, v, 1);
+      await API.toggleWishlist(id);
+      await renderWishlist();
+      window.dispatchEvent(new CustomEvent("oronno:opencart"));
+    }
+  </script>
+</body>
+</html>

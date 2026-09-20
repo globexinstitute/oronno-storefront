@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Our Boutique | Oronno Fashion</title>
+  <meta name="description" content="Discover Oronno Fashion — Dhaka-based boutique specializing in curated women's Pakistani and ethnic dresses. Wear grace, own the moment.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .about-hero {
+      background-color: var(--color-burgundy-dark);
+      color: var(--color-cream);
+      padding: 4.5rem var(--container-pad);
+      text-align: center;
+    }
+    .about-hero h1 {
+      color: var(--color-cream);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      margin-bottom: 0.75rem;
+    }
+    .about-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      padding-block: 4.5rem;
+    }
+    @media (min-width: 992px) {
+      .about-split {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .about-image-box {
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .about-content h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      margin-bottom: 1.25rem;
+      line-height: 1.25;
+    }
+    .about-content p {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+    .craft-quote {
+      border-left: 3px solid var(--color-gold);
+      padding-left: 1.25rem;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--color-burgundy);
+      margin-block: 1.75rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="about-hero">
+      <span class="text-gold" style="font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;">The Oronno Ethos</span>
+      <h1 class="font-serif">Rooted in Grace, Styled for You</h1>
+      <p style="max-width: 620px; margin: 0 auto; color: var(--color-gold-light); font-size: 1rem;">
+        From Casual to Luxury, All in One Place.
+      </p>
+    </div>
+
+    <div class="container">
+      <!-- Section 1: The Name & Vision -->
+      <section class="about-split">
+        <div class="about-image-box">
+          <img src="images/categories/cat-festive.jpg" alt="Festive Pakistani Suit by Oronno Fashion" loading="lazy">
+        </div>
+        <div class="about-content">
+          <span class="section-eyebrow">Our Identity</span>
+          <h2>The Meaning of Oronno</h2>
+          <p>
+            In Bengali, <em>Oronno</em> translates to "forest"—a symbol of deep roots, organic beauty, natural balance, and quiet majesty. Our brand was established in Dhaka to bring women an authentic, carefully curated destination for Pakistani suits and ethnic wear that never compromises on fabric purity or stitching perfection.
+          </p>
+          <div class="craft-quote">
+            "Not just fashion, it's a feeling — wear grace, own the moment."
+          </div>
+          <p>
+            We curate three distinct tiers of dresses: everyday breathable cotton lawns for polished casual settings, resplendent organzas for family festivals, and opulent micro-chiffons with laser cutwork for celebrations.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 2: Craft & Sizing Commitment -->
+      <section class="about-split" style="border-top: 1px solid var(--color-border);">
+        <div class="about-content">
+          <span class="section-eyebrow">Our Quality Promise</span>
+          <h2>Carefully Selected, Quality Assured</h2>
+          <p>
+            Every single piece that arrives at our studio in Donia, Dhaka is closely inspected. We examine thread tension, neck embroidery symmetry, dupatta scalloping, and trouser stitching before an outfit is packaged.
+          </p>
+          <p>
+            Because standard off-the-rack sizing does not always suit every silhouette, we offer a dedicated custom sizing service. Our tailoring team accommodates your exact bust, waist, kameez length, and armhole preferences.
+          </p>
+          <div style="margin-top: 2rem;">
+            <a href="custom-size.html" class="btn btn-primary">Learn About Custom Sizing</a>
+          </div>
+        </div>
+        <div class="about-image-box">
+          <img src="images/products/luxury-01-a.jpg" alt="Deep Red Luxury Kameez Showcase" loading="lazy">
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

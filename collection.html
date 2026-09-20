@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collection | Oronno Fashion - Pakistani & Ethnic Dresses</title>
+  <meta name="description" content="Browse curated Pakistani three-piece suits, festive organza dresses, and luxury chiffon kameez in Dhaka.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    .catalog-header {
+      background-color: var(--color-burgundy-dark);
+      color: var(--color-cream);
+      padding: 3.5rem var(--container-pad) 3rem var(--container-pad);
+      text-align: center;
+      position: relative;
+    }
+    .catalog-header h1 {
+      color: var(--color-cream);
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 0.5rem;
+    }
+    .catalog-header p {
+      color: var(--color-gold-light);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding-block: 2.5rem 5rem;
+    }
+    @media (min-width: 992px) {
+      .catalog-layout {
+        grid-template-columns: 260px 1fr;
+      }
+    }
+    /* Filter Sidebar */
+    .filter-sidebar {
+      display: none;
+    }
+    @media (min-width: 992px) {
+      .filter-sidebar {
+        display: block;
+        border-right: 1px solid var(--color-border);
+        padding-right: 1.5rem;
+      }
+    }
+    .filter-group {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .filter-group:last-child {
+      border-bottom: none;
+    }
+    .filter-title {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--color-burgundy);
+      margin-bottom: 0.85rem;
+    }
+    .filter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .filter-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      color: var(--color-text);
+    }
+    .filter-checkbox-label input {
+      accent-color: var(--color-burgundy);
+      width: 16px;
+      height: 16px;
+    }
+    .size-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .size-chip-btn {
+      border: 1px solid var(--color-border);
+      padding: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+      background: var(--color-white);
+      transition: all var(--transition-fast);
+    }
+    .size-chip-btn.active {
+      background: var(--color-burgundy);
+      color: var(--color-white);
+      border-color: var(--color-burgundy);
+    }
+    /* Toolbar */
+    .catalog-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .product-counter {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+    .sort-select {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .mobile-filter-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+    }
+    @media (min-width: 992px) {
+      .mobile-filter-trigger {
+        display: none;
+      }
+    }
+    /* Mobile Filter Drawer */
+    .filter-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30,27,24,0.5);
+      z-index: 250;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-smooth);
+    }
+    .filter-drawer-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .filter-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: min(85vw, 340px);
+      height: 100%;
+      background: var(--color-cream-soft);
+      z-index: 251;
+      transform: translateX(-100%);
+      transition: transform var(--transition-smooth);
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    .filter-drawer.is-open {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+
+  <main class="site-main">
+    <div class="catalog-header">
+      <h1 id="catalog-title">Shop Collection</h1>
+      <p id="catalog-desc">Carefully selected Pakistani three-piece suits and handcrafted kameez designs.</p>
+    </div>
+
+    <div class="container">
+      <div class="catalog-layout">
+        <!-- Desktop Sidebar -->
+        <aside class="filter-sidebar">
+          <div class="filter-group">
+            <h3 class="filter-title">Category</h3>
+            <div class="filter-list">
+              <label class="filter-checkbox-label">
+                <input type="radio" name="category-radio" value="all" checked onchange="handleCategoryFilter('all')"> All Collections
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="radio" name="category-radio" value="casual" onchange="handleCategoryFilter('casual')"> Casual
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="radio" name="category-radio" value="festive" onchange="handleCategoryFilter('festive')"> Festive
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="radio" name="category-radio" value="luxury" onchange="handleCategoryFilter('luxury')"> Luxury Pret
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h3 class="filter-title">Size</h3>
+            <div class="size-chips">
+              <button type="button" class="size-chip-btn" onclick="toggleSizeFilter(this, 'XS')">XS</button>
+              <button type="button" class="size-chip-btn" onclick="toggleSizeFilter(this, 'S')">S</button>
+              <button type="button" class="size-chip-btn" onclick="toggleSizeFilter(this, 'M')">M</button>
+              <button type="button" class="size-chip-btn" onclick="toggleSizeFilter(this, 'L')">L</button>
+              <button type="button" class="size-chip-btn" onclick="toggleSizeFilter(this, 'XL')">XL</button>
+              <button type="button" class="size-chip-btn" onclick="toggleSizeFilter(this, 'XXL')">XXL</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h3 class="filter-title">Fabric</h3>
+            <div class="filter-list">
+              <label class="filter-checkbox-label">
+                <input type="checkbox" value="Chiffon" onchange="handleFabricFilter(this)"> Chiffon
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" value="Lawn" onchange="handleFabricFilter(this)"> Cotton Lawn
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" value="Organza" onchange="handleFabricFilter(this)"> Organza
+              </label>
+              <label class="filter-checkbox-label">
+                <input type="checkbox" value="Georgette" onchange="handleFabricFilter(this)"> Georgette
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <h3 class="filter-title">Availability</h3>
+            <label class="filter-checkbox-label">
+              <input type="checkbox" id="instock-filter" onchange="handleInStockFilter(this)"> In Stock Only
+            </label>
+          </div>
+        </aside>
+
+        <!-- Product Area -->
+        <section>
+          <div class="catalog-toolbar">
+            <button class="mobile-filter-trigger" id="btn-open-filter-drawer">
+              <span>☰ Filter</span>
+            </button>
+            <div class="product-counter" id="product-count-label">Showing all dresses</div>
+            <select class="sort-select" id="sort-select" onchange="handleSortChange(this.value)">
+              <option value="featured">Featured</option>
+              <option value="newest">New Arrivals</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+
+          <div class="product-grid" id="catalog-products-grid"></div>
+
+          <div style="text-align: center; margin-top: 3.5rem;" id="load-more-container">
+            <button class="btn btn-outline" id="load-more-btn" onclick="loadMoreProducts()" style="display: none;">
+              Load More
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Mobile Filter Drawer -->
+    <div class="filter-drawer-overlay" id="filter-drawer-overlay"></div>
+    <div class="filter-drawer" id="filter-drawer">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 class="font-serif text-burgundy">Filters</h3>
+        <button class="icon-btn" id="btn-close-filter-drawer">✕</button>
+      </div>
+      <div id="mobile-filter-content"></div>
+      <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="closeFilterDrawer()">
+        Apply Filters
+      </button>
+    </div>
+  </main>
+
+  <footer id="site-footer" class="site-footer"></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let currentCategory = "all";
+    let currentSort = "featured";
+    let activeSize = null;
+    let selectedFabrics = [];
+    let inStockOnly = false;
+    let currentPage = 1;
+    let shownCount = 0;
+    const PAGE_LIMIT = 9;
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get("category");
+      if (catParam) {
+        currentCategory = catParam;
+        const radio = document.querySelector(`input[name="category-radio"][value="${catParam}"]`);
+        if (radio) radio.checked = true;
+      }
+      updateHeaderTexts();
+      await fetchAndRender();
+      setupMobileDrawer();
+    });
+
+    function updateHeaderTexts() {
+      const titleEl = document.getElementById("catalog-title");
+      const descEl = document.getElementById("catalog-desc");
+      if (currentCategory === "casual") {
+        titleEl.textContent = "Casual Wear";
+        descEl.textContent = "Breathable pure lawn, lightweight cottons, and daily elegance.";
+      } else if (currentCategory === "festive") {
+        titleEl.textContent = "Festive Collection";
+        descEl.textContent = "Exquisite organza, zari motifs, and intricate thread work for every celebration.";
+      } else if (currentCategory === "luxury") {
+        titleEl.textContent = "Luxury Pret";
+        descEl.textContent = "Heavily embellished bridal nets, velvet craftsmanship, and statement silhouettes.";
+      } else {
+        titleEl.textContent = "All Collections";
+        descEl.textContent = "Explore our complete range of Pakistani and ethnic dresses.";
+      }
+    }
+
+    async function fetchAndRender(page = 1, append = false) {
+      currentPage = page;
+      const filters = {
+        size: activeSize,
+        inStockOnly: inStockOnly,
+        fabric: selectedFabrics.length > 0 ? selectedFabrics[0] : null
+      };
+
+      const result = await API.getProducts({
+        category: currentCategory === "new" ? null : currentCategory,
+        sort: currentSort,
+        filters,
+        page: currentPage,
+        limit: PAGE_LIMIT
+      });
+
+      const container = document.getElementById("catalog-products-grid");
+      const counterLabel = document.getElementById("product-count-label");
+      const loadMoreBtn = document.getElementById("load-more-btn");
+
+      if (!append && result.products.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: var(--color-text-muted);">No dresses match your selected filters. Try clearing some options.</div>`;
+        shownCount = 0;
+        counterLabel.textContent = `Showing 0 of ${result.total} dresses`;
+        if (loadMoreBtn) loadMoreBtn.style.display = "none";
+        return;
+      }
+
+      const wishlist = await API.getWishlist();
+      const wishlistIds = wishlist.map(p => p.id);
+
+      const html = result.products.map(product => {
+        const isWishlisted = wishlistIds.includes(product.id);
+        const displayName = ORONNO_I18N.getLang() === 'bn' ? product.name_bn : product.name;
+        const currentPrice = product.salePrice || product.price;
+
+        return `
+          <article class="product-card">
+            <div class="product-image-box">
+              ${product.isNew ? '<span class="product-badge-pill">New</span>' : ''}
+              <button class="product-wishlist-btn ${isWishlisted ? 'is-active' : ''}" onclick="toggleWishlist(${product.id}, this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </button>
+              <a href="product.html?slug=${product.slug}">
+                <img src="${product.images[0]}" alt="${product.name}" class="product-image-primary" loading="lazy">
+                <img src="${product.images[1]}" alt="${product.name}" class="product-image-secondary" loading="lazy">
+              </a>
+              <div class="product-actions-bar">
+                <a href="product.html?slug=${product.slug}" class="product-action-btn btn-action-quick">Details</a>
+                <button class="product-action-btn btn-action-add" onclick="quickAdd(${product.id})">+ Add to Bag</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <span class="product-cat-tag">${product.category}</span>
+              <a href="product.html?slug=${product.slug}" class="product-name-link">${displayName}</a>
+              <p class="product-fabric-preview">${product.fabric}</p>
+              <div class="product-price-row">
+                <span class="current-price">৳${currentPrice.toLocaleString()}</span>
+                ${product.salePrice ? `<span class="original-price">৳${product.price.toLocaleString()}</span>` : ''}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      if (append) {
+        container.insertAdjacentHTML("beforeend", html);
+        shownCount += result.products.length;
+      } else {
+        container.innerHTML = html;
+        shownCount = result.products.length;
+      }
+
+      counterLabel.textContent = `Showing ${shownCount} of ${result.total} dresses`;
+      if (loadMoreBtn) loadMoreBtn.style.display = (shownCount < result.total) ? "inline-flex" : "none";
+    }
+
+    function loadMoreProducts() {
+      fetchAndRender(currentPage + 1, true);
+    }
+
+    function handleCategoryFilter(cat) {
+      currentCategory = cat;
+      updateHeaderTexts();
+      fetchAndRender(1);
+    }
+    function handleSortChange(sort) {
+      currentSort = sort;
+      fetchAndRender(1);
+    }
+    function toggleSizeFilter(btn, size) {
+      if (activeSize === size) {
+        activeSize = null;
+        btn.classList.remove("active");
+      } else {
+        document.querySelectorAll(".size-chip-btn").forEach(b => b.classList.remove("active"));
+        activeSize = size;
+        btn.classList.add("active");
+      }
+      fetchAndRender(1);
+    }
+    function handleFabricFilter(checkbox) {
+      if (checkbox.checked) {
+        selectedFabrics.push(checkbox.value);
+      } else {
+        selectedFabrics = selectedFabrics.filter(f => f !== checkbox.value);
+      }
+      fetchAndRender(1);
+    }
+    function handleInStockFilter(checkbox) {
+      inStockOnly = checkbox.checked;
+      fetchAndRender(1);
+    }
+    async function toggleWishlist(id, btn) {
+      const res = await API.toggleWishlist(id);
+      btn.classList.toggle("is-active", res.added);
+      const svg = btn.querySelector("svg");
+      if (svg) svg.setAttribute("fill", res.added ? "currentColor" : "none");
+    }
+    async function quickAdd(id) {
+      const res = await API.getProducts();
+      const product = res.products.find(p => p.id === id);
+      if (!product) return;
+      const v = product.variants.find(item => item.stock > 0) || product.variants[0];
+      await API.addToCart(product.id, v, 1);
+      window.dispatchEvent(new CustomEvent("oronno:opencart"));
+    }
+    function setupMobileDrawer() {
+      const openBtn = document.getElementById("btn-open-filter-drawer");
+      const closeBtn = document.getElementById("btn-close-filter-drawer");
+      const overlay = document.getElementById("filter-drawer-overlay");
+      const drawer = document.getElementById("filter-drawer");
+      const content = document.getElementById("mobile-filter-content");
+      const sidebar = document.querySelector(".filter-sidebar");
+
+      if (sidebar && content) {
+        content.innerHTML = sidebar.innerHTML;
+      }
+
+      openBtn?.addEventListener("click", () => {
+        overlay.classList.add("is-open");
+        drawer.classList.add("is-open");
+      });
+      const close = () => {
+        overlay.classList.remove("is-open");
+        drawer.classList.remove("is-open");
+      };
+      closeBtn?.addEventListener("click", close);
+      overlay?.addEventListener("click", close);
+      window.closeFilterDrawer = close;
+    }
+  </script>
+</body>
+</html>
