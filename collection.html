@@ -419,10 +419,17 @@
       fetchAndRender(currentPage + 1, true);
     }
 
+    function maybeCloseFilterDrawer() {
+      const d = document.getElementById("filter-drawer");
+      if (d && d.classList.contains("is-open") && typeof window.closeFilterDrawer === "function") {
+        window.closeFilterDrawer();
+      }
+    }
     function handleCategoryFilter(cat) {
       currentCategory = cat;
       updateHeaderTexts();
       fetchAndRender(1);
+      maybeCloseFilterDrawer();
     }
     function handleSortChange(sort) {
       currentSort = sort;
@@ -438,6 +445,7 @@
         btn.classList.add("active");
       }
       fetchAndRender(1);
+      maybeCloseFilterDrawer();
     }
     function handleFabricFilter(checkbox) {
       if (checkbox.checked) {
@@ -446,10 +454,12 @@
         selectedFabrics = selectedFabrics.filter(f => f !== checkbox.value);
       }
       fetchAndRender(1);
+      maybeCloseFilterDrawer();
     }
     function handleInStockFilter(checkbox) {
       inStockOnly = checkbox.checked;
       fetchAndRender(1);
+      maybeCloseFilterDrawer();
     }
     async function toggleWishlist(id, btn) {
       const res = await API.toggleWishlist(id);
